@@ -1,43 +1,28 @@
 PROTOCOL:
 
-AUDIOCLIENT:
-
+AUDIOCLIENT: 
 sends a packet to the audioserver containing the name of the audiofile in wav.
-
+Then it waits to recieves the packet containing the struct data: channels, sample rate and sample size.
+It then checks if there is any filter to be used on the audio, and then sets up the audio parameters. It then tsends a request over to audioserver to receive one packet containing a chunk of audio.  When the audioclient received the packet with the chunck of audio, it then checks if the packet is the packet we want receiving. If not the packet would play silence, else the packet plays the audio. It then send e request for a new packet with audio.
 AUDIOSERVER:
-
 receives the packet containing the audiofile name in wav.
-
 then retrieves the data from the audiofile : channels, sample rate and sample size
-and store them into a struct
+and store them into a struct. Then sends the data to the audioclient.  It then waits for a packet from the client which is the request to send the audio in chuncks to the client. When the server receives the request , it then reads in a chunck of the audiofile, and sends it to the audioclient in packets.
 
-then sends the data to the audioclient.
+The interface of audioclient:
+audioclient <server_host_name> <file_name > -filter_name  <filter_parameter>
+The -filter_name is a optional parameter with an argument.
 
-AUDIOCLIENT:
+Filters with option:
+change_rate    speed (float value)
+It is called using: 
 
-receives the packet containing the struct data: channels, sample rate and sample size
+—filter_name  —option parameter option
 
-and then sets up the audio parameters.
 
-then sends a request over to audioserver to receive one packet containing a chunk of audio.
 
-AUDIOSERVER:
 
-receives the request for sending one packet
 
-reads in a chunk of the audiofile
-
-sends this chunk to the audioclient in packet
-
-AUDIOSCLIENT:
-
-receives packet with the chuck of audiofile
-
-checks if it is the packet that you where waiting to receive
-- if it is the packet, it plays the audio
-- if it is not the packet it would play silence
-
-then sends a request for another packet
 
 
 

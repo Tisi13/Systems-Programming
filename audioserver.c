@@ -77,7 +77,7 @@ int stream_data(int client_fd, struct sockaddr *addr, socklen_t addrlen, char *f
 
         // sends audio file data to client
         {
-            struct timeval timeout = {.tv_sec = 1, .tv_usec = 0};
+            struct timeval timeout = {.tv_sec = 10, .tv_usec = 0};
             if (setsockopt(client_fd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) == -1){
                 perror("Timeout could not be set");
                 return 1;
@@ -95,6 +95,7 @@ int stream_data(int client_fd, struct sockaddr *addr, socklen_t addrlen, char *f
             for (wavfile.ID = 1; ; wavfile.ID++) {
 
                 //receives request for one packet
+                
                 numbytesresv = (int) recvfrom(client_fd, &something, sizeof(something), 0, addr, &addrlen);
 
                 if (numbytesresv <= -1) {
@@ -140,12 +141,10 @@ int stream_data(int client_fd, struct sockaddr *addr, socklen_t addrlen, char *f
 
             }
 
-
         }
 
     }
-
-
+    
 }
 
 /// unimportant: the signal handler. This function gets called when Ctrl^C is pressed
